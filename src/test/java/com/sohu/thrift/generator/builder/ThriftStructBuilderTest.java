@@ -3,12 +3,9 @@
  */
 package com.sohu.thrift.generator.builder;
 
-import java.io.FileOutputStream;
-
 import org.junit.Test;
 
 import com.sohu.thrift.generator.test.ICommonUserService;
-import com.sohu.thrift.generator.test.protobuf.IUserService;
 
 /**
  * @author hongliuliao
@@ -25,10 +22,4 @@ public class ThriftStructBuilderTest {
 		this.fileBuilder.buildToOutputStream(System.out);
 	}
 	
-	@Test
-	public void toOutputstream_protobuf() throws Exception {
-		this.fileBuilder.setCommonServiceClass(IUserService.class);
-		this.fileBuilder.buildToOutputStream(System.out);
-		this.fileBuilder.buildToOutputStream(new FileOutputStream("d:/test.thrift"));
-	}
 }
