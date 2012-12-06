@@ -10,7 +10,7 @@ import com.sohu.thrift.generator.test.ICommonUserService;
 /**
  * @author hongliuliao
  *
- * createTime:2012-12-6 ÏÂÎç3:24:05
+ * createTime:2012-12-6 ä¸‹åˆ3:24:05
  */
 public class ThriftStructBuilderTest {
 

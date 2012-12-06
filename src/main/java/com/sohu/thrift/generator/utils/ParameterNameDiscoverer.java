@@ -12,7 +12,7 @@ import com.thoughtworks.paranamer.Paranamer;
 /**
  * @author hongliuliao
  *
- * createTime:2012-12-6 ÏÂÎç3:12:38
+ * createTime:2012-12-6 ä¸‹åˆ3:12:38
  */
 public class ParameterNameDiscoverer {
 	
