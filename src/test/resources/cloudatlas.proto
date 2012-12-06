@@ -1,0 +1,159 @@
+package cloudatlas;
+option java_package = "com.sohu.thrift.generator.test.protobuf";
+option java_outer_classname = "Cloudatlas";
+
+message User{
+	optional int64 id = 1;
+	optional string passport = 2;
+	optional int64 quota = 3;	
+	optional int64 usage = 4;	
+	optional int64 quota_increased_at = 5;	
+	optional int64 created_at = 6;
+	optional BlockedStatus blocked = 8;
+	optional int64 blocked_at = 9;
+	optional uint32 public_folders = 10;	
+	optional uint32 private_folders = 11;	
+	optional uint32 photo_num = 12; 
+	optional uint32 view_count = 13; 
+	optional string bio = 14;
+	optional string small_avatar = 15;
+	optional string large_avatar = 16;
+	optional string nick = 17;
+	optional int64 default_folder = 18;
+}
+
+message Authentication {
+	optional uint64 id = 1;
+	required uint64 user_id = 2;
+	required string provider = 3;
+	required string oauth_uid = 4;
+	optional string access_token = 5;
+	optional uint64 expires = 6;
+	optional int64 created_at = 7;
+	optional int64 updated_at = 8;
+}
+
+
+message Folder{
+	required uint64 id = 1;
+	optional string name = 2;
+	optional int64 user_id = 3;
+	optional string description = 4;
+	optional uint64 cover_id = 5;
+	optional int64 created_at = 6;
+	optional int64 updated_at = 7;
+	optional FolderPermission permission = 8;
+	optional uint32 photo_num = 9; 
+	optional uint32 view_count = 10; 
+	optional PhotoStorageInfo cover = 11; 
+	repeated PhotoStorageInfo thumbs = 12; 
+}
+
+message Photo{
+	required uint64 id = 1;
+	optional string original_filename = 2;
+	optional int32 file_size = 3;
+	optional string content_type = 4;
+	optional int32 width = 5;
+	optional int32 height = 6;
+	optional uint64 folder_id = 7;
+	optional bool is_cover = 8;
+	optional int64 user_id = 9;
+	optional string description = 10;
+	optional int64 upload_at = 11;
+	optional string upload_ip = 12;
+	optional string farm = 13;	
+	optional string bucket = 14;	
+	optional string storage_keys = 15;	
+	optional bool deleted = 16;
+	optional uint32 SourceType = 17;	
+	optional string source_address = 18;	
+	optional string source_extra_info = 19;	
+	optional uint64 from_photo_id = 20;	
+	optional uint64 from_folder_id = 21;	
+	optional uint64 from_user_id = 22;	
+	optional uint64 origin_photo_id = 23;	
+	optional uint64 origin_folder_id = 24;	
+	optional uint64 origin_user_id = 25;	
+	optional uint32 repin_times = 26;	
+	optional uint32 view_count = 27; 
+	optional uint32 frames = 28 [default = 1]; 
+	optional uint32 likes = 29; 
+}
+
+message PhotoStorageInfo{
+    optional string farm = 1;  
+    optional string bucket = 2;    
+    optional string storage_keys = 3;  
+}
+
+message Tag{
+	required string name = 1;
+	optional bool is_suggested = 2; 
+	optional int64 created_at = 3;  
+}
+
+message Tagging{
+	optional uint64 id = 1;
+	optional string tag_name = 2;
+	optional int64 user_id = 3;
+	optional TaggableType taggable_type = 4;
+	optional int64 taggable_id = 5;
+	optional int64 created_at = 6;
+}
+
+
+message FollowInfo{
+	required int64 user_id = 1;
+	required int32 following_count = 2;
+	required int32 follower_count = 3;
+}
+
+message InviteCode{
+    optional uint64 id = 1;
+    optional string code = 2 ;
+    optional uint32 revoked = 3;
+    optional uint64 usedBy = 4;
+    optional uint64 usedAt = 5;
+}
+
+message CodeMsg {
+    required sint32 code =1 [default=0];
+    required string msg =2 [default=""];
+}
+
+message AnonymousUser {
+	optional uint64 id = 1;
+	optional string ip = 2;
+	optional int64 created_at = 3;
+	optional int64 updated_at = 4;
+}
+
+enum BlockedStatus{
+	ACTIVED = 0; // 活跃
+	BLOCKED = 1; // 锁定
+}
+
+enum FolderPermission {
+	PUBLIC_FOLDER = 0; // 公开
+	PRIVATE_FOLDER = 1; // 私有
+}
+
+enum SourceType{
+	UPLOAD = 0;	// 自己上传
+	IN_SITE_SAVE = 1; // 站内转存
+    	OTHER_SITE_SAVE = 2;	// 网站转存（包括微博转存，新闻转载）
+}
+
+enum TaggableType{
+	FOLDER = 1; // 文件夹
+}
+
+enum FollowType{
+	SINGLE = 0;//单向跟随
+	MUTUAL = 1;//互相跟随
+}
+
+// cd ${project_path}
+// protoc --java_out=src/test/java src/test/resources/*.proto
+
