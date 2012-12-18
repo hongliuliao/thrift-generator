@@ -18,8 +18,6 @@ public class ThriftField {
 	
 	private ThriftType thriftType;
 	
-	private Object genericsType;
-	
 	private Generic generic;
 	
 	private String name;
@@ -52,66 +50,11 @@ public class ThriftField {
 		this.name = name;
 	}
 
-	/**
-	 * @return the genericsType
-	 */
-	public Object getGenericsType() {
-		if(genericsType instanceof ThriftType) {
-			return ((ThriftType)genericsType).getValue();
-		}
-		if(genericsType == null) {
-			return "";
-		}
-		return genericsType;
-	}
-
-	/**
-	 * @param genericsType the genericsType to set
-	 */
-	public void setGenericsType(Object genericsType) {
-		this.genericsType = genericsType;
-	}
 
 	@Override
 	public String toString() {
 		return "ThriftField [thriftType=" + thriftType + ", genericsType="
-				+ genericsType + ", name=" + name + "]";
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result
-				+ ((genericsType == null) ? 0 : genericsType.hashCode());
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result
-				+ ((thriftType == null) ? 0 : thriftType.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		ThriftField other = (ThriftField) obj;
-		if (genericsType == null) {
-			if (other.genericsType != null)
-				return false;
-		} else if (!genericsType.equals(other.genericsType))
-			return false;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		if (thriftType != other.thriftType)
-			return false;
-		return true;
+				+ generic + ", name=" + name + "]";
 	}
 
 	/**
@@ -132,8 +75,32 @@ public class ThriftField {
 		Generic generic = CommonUtils.getGenericsByType(type);
 		if(CollectionUtils.isNotEmpty(generic.getTypes())) {
 			this.generic = generic;
-			this.genericsType = generic.toString();
 		}
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ThriftField other = (ThriftField) obj;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		return true;
 	}
 	
 }

@@ -57,4 +57,21 @@ public class Generic extends ThriftType {
 		return sb.toString();
 	}
 	
+	public String toThriftString() {
+		if(types == null || types.isEmpty()) {
+			return "";
+		}
+		StringBuilder sb = new StringBuilder("<");
+		for (Object type : types) {
+			if(type instanceof Generic) {
+				sb.append(type.toString());
+			}else {
+				ThriftType thriftType = (ThriftType) type;
+				sb.append(thriftType.getValue());
+			}
+		}
+		sb.append(">");
+		return sb.toString();
+	}
+	
 }
