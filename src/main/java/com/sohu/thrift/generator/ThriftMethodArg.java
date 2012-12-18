@@ -5,10 +5,6 @@ package com.sohu.thrift.generator;
 
 import java.lang.reflect.Type;
 
-import org.apache.commons.collections.CollectionUtils;
-
-import com.sohu.thrift.generator.utils.CommonUtils;
-
 /**
  * @author hongliuliao
  *
@@ -28,15 +24,7 @@ public class ThriftMethodArg {
 	}
 	
 	public ThriftMethodArg(Type type, String paramName) {
-		this.buildGenerics(type);
 		this.name = paramName;
-	}
-	
-	public void buildGenerics(Type type) {
-		Generic generic = CommonUtils.getGenericsByType(type);
-		if(CollectionUtils.isNotEmpty(generic.getTypes())) {
-			this.genericType = generic;
-		}
 	}
 	
 	/**

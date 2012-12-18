@@ -23,8 +23,6 @@ import org.apache.commons.logging.LogFactory;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.Message;
 import com.google.protobuf.Message.Builder;
-import com.sohu.thrift.generator.Generic;
-import com.sohu.thrift.generator.ThriftType;
 
 /**
  * It is CommontUtils?? May be call ReflectionUtils is better? :)
@@ -192,60 +190,6 @@ public class CommonUtils {
 		}
 	}
 	
-	public static String convertJavaSimpleToThrift(String javaDesc) {
-		if(javaDesc.indexOf("List") != -1) {
-			return "list";
-		}
-		
-		if(javaDesc.indexOf("Map") != -1) {
-			return "map";
-		}
-		
-		if(javaDesc.indexOf("Set") != -1) {
-			return "set";
-		}
-		
-		javaDesc = javaDesc.replace("Short", "short");
-		javaDesc = javaDesc.replace("short", "short");
-		javaDesc = javaDesc.replace("Integer", "i32");
-		javaDesc = javaDesc.replace("int", "i32");
-		javaDesc = javaDesc.replace("Long", "i64");
-		javaDesc = javaDesc.replace("long", "i64");
-		javaDesc = javaDesc.replace("String", "string");
-		
-		return javaDesc;
-	}
-	
-	public static String convertJavaToThrift(String javaDesc) {
-		javaDesc = javaDesc.replace("java.lang.Short", "short");
-		javaDesc = javaDesc.replace("java.lang.Integer", "i32");
-		javaDesc = javaDesc.replace("java.lang.Long", "i64");
-		javaDesc = javaDesc.replace("java.lang.String", "string");
-		javaDesc = javaDesc.replace("java.util.List", "list");
-		javaDesc = javaDesc.replace("java.util.Set", "set");
-		javaDesc = javaDesc.replace("java.util.Map", "map");
-		return javaDesc;
-	}
-	
-	public static String convertJavaTypeToSimple(String javaDesc) {
-		if((javaDesc.indexOf("List") != -1) || (javaDesc.indexOf("Set") != -1)
-				|| javaDesc.indexOf("Map") != -1) {
-			javaDesc = javaDesc.replace("java.lang.Short", "Short");
-			javaDesc = javaDesc.replace("java.lang.Integer", "Integer");
-			javaDesc = javaDesc.replace("java.lang.Long", "Long");
-		} else {
-			javaDesc = javaDesc.replace("java.lang.Short", "short");
-			javaDesc = javaDesc.replace("java.lang.Integer", "int");
-			javaDesc = javaDesc.replace("java.lang.Long", "long");
-		}
-		
-		javaDesc = javaDesc.replace("java.lang.String", "String");
-		javaDesc = javaDesc.replace("java.util.List", "List");
-		javaDesc = javaDesc.replace("java.util.Set", "Set");
-		javaDesc = javaDesc.replace("java.util.Map", "Map");
-		return javaDesc;
-	}
-	
 	public static List<Class<?>> getMethodReturnTypeRelationClasses(Method method) {
 		List<Class<?>> classes = new ArrayList<Class<?>>();
 		getGenericParameterTypes(method.getGenericReturnType(), classes);
@@ -256,49 +200,6 @@ public class CommonUtils {
 			}
 		}
 		return classes;
-	}
-	
-	public static List<Class<?>> getMethodArgsRelationClasses(Type argType) {
-		List<Class<?>> classes = new ArrayList<Class<?>>();
-		if(argType instanceof ParameterizedType) {
-			getGenericParameterTypes(argType, classes);
-		}else if(!isBasicType((Class<?>)argType)) {
-			if(! isCollectionType((Class<?>)argType)) {
-				classes.add((Class<?>)argType);
-			}else {
-				getGenericParameterTypes(argType, classes);
-			}
-		}
-		for (Iterator<Class<?>> i = classes.iterator();i.hasNext();) {
-			Class<?> clazz = i.next();
-			if(isBasicType(clazz) || isCollectionType(clazz)) {
-				i.remove();
-			}
-		}
-		return classes;
-	}
-	
-	public static Generic getGenericsByType(Type type) {
-		if(!(type instanceof ParameterizedType)) {
-			return null;
-		}
-		Generic generic = new Generic();
-		ParameterizedType parameterizedType = (ParameterizedType) type;
-		Type[] types = parameterizedType.getActualTypeArguments();
-		for (Type type2 : types) {
-			if(type2 instanceof ParameterizedType) {
-				generic.addGeneric(getGenericsByType(type2));
-				continue;
-			}
-			ThriftType thriftType = ThriftType.fromJavaType((Class<?>)type2);
-			if(thriftType == ThriftType.STRUCT) {
-				thriftType = thriftType.clone();
-				thriftType.setJavaClass((Class<?>)type2);
-				thriftType.setValue(((Class<?>)type2).getSimpleName());
-			}
-			generic.addGeneric(thriftType);
-		}
-		return generic;
 	}
 	
 	public static Field[] getCanSerializeField(Class<?> clazz) {
