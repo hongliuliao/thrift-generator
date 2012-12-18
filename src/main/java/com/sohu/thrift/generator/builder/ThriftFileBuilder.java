@@ -20,8 +20,8 @@ import org.apache.thrift.protocol.TType;
 import org.junit.Test;
 
 import com.google.protobuf.Descriptors.EnumValueDescriptor;
-import com.google.protobuf.Message;
 import com.google.protobuf.Descriptors.FieldDescriptor;
+import com.google.protobuf.Message;
 import com.sohu.thrift.generator.Generic;
 import com.sohu.thrift.generator.ThriftEnum;
 import com.sohu.thrift.generator.ThriftEnumField;
@@ -66,10 +66,10 @@ public class ThriftFileBuilder {
 			thriftMethod.setName(method.getName());
 			thriftMethod.setRelationClasses(CommonUtils.getMethodReturnTypeRelationClasses(method));
 			
-			if(this.isBasicType(method.getReturnType()) || this.isCollectionType(method.getReturnType())) {
-				thriftMethod.setReturnType(getGenericReturnType(method));
-			}else {
-				thriftMethod.setReturnType(method.getReturnType().getSimpleName());
+			ThriftType returnThriftType = ThriftType.fromJavaType(method.getGenericReturnType());
+			thriftMethod.setReturnGenericType(Generic.fromType(method.getGenericReturnType()));
+			if(returnThriftType.isStruct()) {
+				this.buildThriftStruct(method.getReturnType(), structs, enums);
 			}
 			
 			Type[] paramTypes = method.getGenericParameterTypes();
@@ -99,19 +99,13 @@ public class ThriftFileBuilder {
 
 			Type paramType = paramTypes[i];
 			ThriftType paramThriftType = ThriftType.fromJavaType(paramType);
-			methodArg.setThriftType(paramThriftType);
-			methodArg.setGeneric(Generic.fromType(paramType));
+			methodArg.setGenericType(Generic.fromType(paramType));
 			if(paramThriftType.isStruct()) {
 				this.buildThriftStruct((Class<?>)paramType, structs, enums);
 			}
 			methodArgs.add(methodArg);
 		}
 		return methodArgs;
-	}
-	
-	private Object getGenericReturnType(Method method) {
-		Type genericReturnType = method.getGenericReturnType();
-		return genericReturnType;
 	}
 	
 	public boolean isBasicType(Class<?> clazz) {
@@ -223,12 +217,12 @@ public class ThriftFileBuilder {
 				buildEnumForProto(enums, fieldDescriptor, field);
 			}
 			if(thriftType.gettType() == TType.LIST) {
-				thriftField.buildGeneric(field.getGenericType());
+				thriftField.setGenericType(Generic.fromType(field.getGenericType()));
 			}
 			if(thriftType.isStruct()) {
 				structs.add(buildThriftStructForThrift(field.getType(), structs, enums));
 			}
-			thriftField.setThriftType(thriftType);
+			thriftField.setGenericType(Generic.fromType(field.getGenericType()));
 			fields.add(thriftField);
 		}
 		struct.setFields(fields);
@@ -264,25 +258,21 @@ public class ThriftFileBuilder {
 			return null;
 		}
 		Type type = field.getGenericType();
+		Generic generic = Generic.fromType(field.getGenericType());
+		thriftField.setGenericType(generic);
 		if(type instanceof ParameterizedType) {
-			ParameterizedType parameterizedType = (ParameterizedType) type;
-			ThriftType thriftType = ThriftType.fromJavaType((Class<?>)parameterizedType.getRawType());
-			thriftField.setThriftType(thriftType);
-			thriftField.buildGeneric(parameterizedType);
-			Generic generic = thriftField.getGeneric();
 			buildStrutsByGeneric(structs, generic, enums);
 		}else {
-			ThriftType thriftType = ThriftType.fromJavaType(field.getType());
-			thriftField.setThriftType(thriftType);
-			if(thriftType.isEnum() || thriftType.isStruct()) {
-				thriftType.setJavaClass(field.getType());
-				thriftType.setValue(field.getType().getSimpleName());
-				thriftType.setJavaTypeName(field.getType().getSimpleName());
-				if(thriftType.isStruct()) {
+			if(generic.isEnum() || generic.isStruct()) {
+				generic.setJavaClass(field.getType());
+				generic.setValue(field.getType().getSimpleName());
+				generic.setJavaTypeName(field.getType().getSimpleName());
+				if(generic.isStruct()) {
 					structs.add(buildThriftStruct(field.getType(), structs, enums));
 				}else {
 					enums.add(buildThriftEnum(field.getType()));
 				}
+				
 			}
 		}
 		return thriftField;

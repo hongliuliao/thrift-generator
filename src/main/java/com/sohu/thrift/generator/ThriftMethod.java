@@ -5,8 +5,6 @@ package com.sohu.thrift.generator;
 
 import java.util.List;
 
-import com.sohu.thrift.generator.utils.CommonUtils;
-
 /**
  * @author hongliuliao
  *
@@ -14,7 +12,7 @@ import com.sohu.thrift.generator.utils.CommonUtils;
  */
 public class ThriftMethod {
 	
-	private Object returnType;
+	private Generic returnGenericType;
 	
 	private String name;
 	
@@ -51,37 +49,6 @@ public class ThriftMethod {
 	}
 
 	/**
-	 * @return the returnType
-	 */
-	public Object getReturnType() {
-		if(returnType instanceof ThriftType) {
-			Object value = ((ThriftType) returnType).getValue();
-			return value;
-		}
-		if(returnType instanceof Class) {
-			ThriftType thriftType = ThriftType.fromJavaType((Class<?>) returnType);
-			if(thriftType.isBasicType()) {
-				return thriftType.getValue();
-			}
-		}
-		String desc = CommonUtils.convertJavaToThrift(returnType.toString());
-		for (Class<?> clazz : this.getRelationClasses()) {
-			if(desc.indexOf(clazz.getName()) != -1) {
-				desc = desc.replace(clazz.getName(), clazz.getSimpleName());
-			}
-		}
-		return desc;
-	}
-	
-
-	/**
-	 * @param returnType the returnType to set
-	 */
-	public void setReturnType(Object returnType) {
-		this.returnType = returnType;
-	}
-
-	/**
 	 * @return the relationClasses
 	 */
 	public List<Class<?>> getRelationClasses() {
@@ -93,6 +60,20 @@ public class ThriftMethod {
 	 */
 	public void setRelationClasses(List<Class<?>> relationClasses) {
 		this.relationClasses = relationClasses;
+	}
+
+	/**
+	 * @return the returnGeneric
+	 */
+	public Generic getReturnGenericType() {
+		return returnGenericType;
+	}
+
+	/**
+	 * @param returnGeneric the returnGeneric to set
+	 */
+	public void setReturnGenericType(Generic returnGeneric) {
+		this.returnGenericType = returnGeneric;
 	}
 	
 }

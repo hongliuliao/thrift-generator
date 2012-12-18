@@ -3,7 +3,6 @@
  */
 package com.sohu.thrift.generator;
 
-import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -17,9 +16,7 @@ import com.sohu.thrift.generator.utils.CommonUtils;
  */
 public class ThriftMethodArg {
 	
-	private ThriftType thriftType;
-	
-	private Generic generic;
+	private Generic genericType;
 	
 	private String name;
 
@@ -31,24 +28,14 @@ public class ThriftMethodArg {
 	}
 	
 	public ThriftMethodArg(Type type, String paramName) {
-		this.buildThriftType(type);
 		this.buildGenerics(type);
 		this.name = paramName;
-	}
-	
-	public void buildThriftType(Type type) {
-		if(!(type instanceof ParameterizedType)) {
-			this.thriftType = ThriftType.fromJavaType((Class<?>)type);
-		}else {
-			ParameterizedType parameterizedType = (ParameterizedType) type;
-			this.thriftType = ThriftType.fromJavaType((Class<?>)parameterizedType.getRawType());
-		}
 	}
 	
 	public void buildGenerics(Type type) {
 		Generic generic = CommonUtils.getGenericsByType(type);
 		if(CollectionUtils.isNotEmpty(generic.getTypes())) {
-			this.generic = generic;
+			this.genericType = generic;
 		}
 	}
 	
@@ -67,31 +54,17 @@ public class ThriftMethodArg {
 	}
 
 	/**
-	 * @return the thriftType
-	 */
-	public ThriftType getThriftType() {
-		return thriftType;
-	}
-
-	/**
-	 * @param thriftType the thriftType to set
-	 */
-	public void setThriftType(ThriftType thriftType) {
-		this.thriftType = thriftType;
-	}
-
-	/**
 	 * @return the generic
 	 */
-	public Generic getGeneric() {
-		return generic;
+	public Generic getGenericType() {
+		return genericType;
 	}
 
 	/**
 	 * @param generic the generic to set
 	 */
-	public void setGeneric(Generic generic) {
-		this.generic = generic;
+	public void setGenericType(Generic generic) {
+		this.genericType = generic;
 	}
 	
 	

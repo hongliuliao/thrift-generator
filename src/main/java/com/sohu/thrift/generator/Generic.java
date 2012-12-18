@@ -15,7 +15,7 @@ import java.util.List;
  * createTime:2012-11-28 上午9:45:20
  */
 public class Generic extends ThriftType {
-
+	
 	/**
 	 * 可能是ThriftType,也可能还是泛型
 	 */
@@ -61,17 +61,21 @@ public class Generic extends ThriftType {
 	
 	public String toThriftString() {
 		if(types == null || types.isEmpty()) {
-			return "";
+			return this.getValue();
 		}
-		StringBuilder sb = new StringBuilder("<");
+		StringBuilder sb = new StringBuilder();
+		sb.append(this.getValue());
+		sb.append("<");
 		for (int i = 0; i < types.size(); i++) {
 			Object type = types.get(i);
+			ThriftType thriftType = (ThriftType) type;
+			
 			if(type instanceof Generic) {
 				sb.append(((Generic) type).toThriftString());
 			}else {
-				ThriftType thriftType = (ThriftType) type;
 				sb.append(thriftType.getValue());
 			}
+			
 			if(i != types.size() - 1) {
 				sb.append(", ");
 			}
@@ -81,26 +85,36 @@ public class Generic extends ThriftType {
 	}
 	
 	public static Generic fromType(Type type) {
-		if(!(type instanceof ParameterizedType)) {
-			return null;
-		}
 		Generic generic = new Generic();
+		if(!(type instanceof ParameterizedType)) {
+			ThriftType thriftType = ThriftType.fromJavaType(type);
+			generic.setJavaClass(thriftType.getJavaClass());
+			generic.setJavaTypeName(thriftType.getJavaTypeName());
+			generic.settType(thriftType.gettType());
+			generic.setValue(thriftType.getValue());
+			generic.setWarpperClassName(thriftType.getWarpperClassName());
+			generic.setType(thriftType.getType());
+			return generic;
+		}
+		ThriftType thriftType = ThriftType.fromJavaType(type);
+		generic.setValue(thriftType.getValue());
 		ParameterizedType parameterizedType = (ParameterizedType) type;
 		Type[] types = parameterizedType.getActualTypeArguments();
-		for (Type type2 : types) {
-			if(type2 instanceof ParameterizedType) {
-				generic.addGeneric(fromType(type2));
+		for (Type typeArgument : types) {
+			if(typeArgument instanceof ParameterizedType) {
+				generic.addGeneric(fromType(typeArgument));
 				continue;
 			}
-			ThriftType thriftType = ThriftType.fromJavaType((Class<?>)type2);
-			if(thriftType == ThriftType.STRUCT) {
-				thriftType = thriftType.clone();
-				thriftType.setJavaClass((Class<?>)type2);
-				thriftType.setValue(((Class<?>)type2).getSimpleName());
+			ThriftType typeArgumentThriftType = ThriftType.fromJavaType((Class<?>)typeArgument);
+			if(typeArgumentThriftType == ThriftType.STRUCT) {
+				typeArgumentThriftType = typeArgumentThriftType.clone();
+				typeArgumentThriftType.setJavaClass((Class<?>)typeArgument);
+				typeArgumentThriftType.setValue(((Class<?>)typeArgument).getSimpleName());
 			}
-			generic.addGeneric(thriftType);
+			generic.addGeneric(typeArgumentThriftType);
 		}
 		return generic;
 	}
+
 	
 }

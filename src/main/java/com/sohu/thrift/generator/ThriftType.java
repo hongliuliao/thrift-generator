@@ -46,21 +46,6 @@ public class ThriftType implements Cloneable {
 	
 	private String value;
 	
-	public byte getSerializeTtype() {
-		if(tType == TType.ENUM) {
-			return TType.I32;
-		}
-		return tType;
-	}
-	
-	public byte gettType() {
-		return tType;
-	}
-
-	public void settType(byte tType) {
-		this.tType = tType;
-	}
-
 	private int type;
 	
 	private String javaTypeName;
@@ -102,6 +87,21 @@ public class ThriftType implements Cloneable {
 		this.javaTypeName = javaTypeName;
 		this.warpperClassName = warpperClassName;
 		this.tType = ttype;
+	}
+	
+	public byte getSerializeTtype() {
+		if(tType == TType.ENUM) {
+			return TType.I32;
+		}
+		return tType;
+	}
+	
+	public byte gettType() {
+		return tType;
+	}
+
+	public void settType(byte tType) {
+		this.tType = tType;
 	}
 
 	@Override
@@ -301,6 +301,20 @@ public class ThriftType implements Cloneable {
 	 */
 	public void setJavaClass(Class<?> javaClass) {
 		this.javaClass = javaClass;
+	}
+
+	/**
+	 * @return the type
+	 */
+	public int getType() {
+		return type;
+	}
+
+	/**
+	 * @param type the type to set
+	 */
+	public void setType(int type) {
+		this.type = type;
 	}
 	
 	

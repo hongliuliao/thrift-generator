@@ -3,11 +3,6 @@
  */
 package com.sohu.thrift.generator;
 
-import java.lang.reflect.Type;
-
-import org.apache.commons.collections.CollectionUtils;
-
-import com.sohu.thrift.generator.utils.CommonUtils;
 
 /**
  * @author hongliuliao
@@ -16,26 +11,10 @@ import com.sohu.thrift.generator.utils.CommonUtils;
  */
 public class ThriftField {
 	
-	private ThriftType thriftType;
-	
-	private Generic generic;
+	private Generic genericType;
 	
 	private String name;
 	
-	/**
-	 * @return the thriftType
-	 */
-	public ThriftType getThriftType() {
-		return thriftType;
-	}
-
-	/**
-	 * @param thriftType the thriftType to set
-	 */
-	public void setThriftType(ThriftType thriftType) {
-		this.thriftType = thriftType;
-	}
-
 	/**
 	 * @return the name
 	 */
@@ -51,33 +30,20 @@ public class ThriftField {
 	}
 
 
-	@Override
-	public String toString() {
-		return "ThriftField [thriftType=" + thriftType + ", genericsType="
-				+ generic + ", name=" + name + "]";
-	}
-
 	/**
 	 * @return the generic
 	 */
-	public Generic getGeneric() {
-		return generic;
+	public Generic getGenericType() {
+		return genericType;
 	}
 
 	/**
 	 * @param generic the generic to set
 	 */
-	public void setGeneric(Generic generic) {
-		this.generic = generic;
+	public void setGenericType(Generic generic) {
+		this.genericType = generic;
 	}
 	
-	public void buildGeneric(Type type) {
-		Generic generic = CommonUtils.getGenericsByType(type);
-		if(CollectionUtils.isNotEmpty(generic.getTypes())) {
-			this.generic = generic;
-		}
-	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
