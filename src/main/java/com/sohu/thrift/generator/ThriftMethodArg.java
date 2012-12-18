@@ -5,8 +5,6 @@ package com.sohu.thrift.generator;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
 
@@ -19,15 +17,11 @@ import com.sohu.thrift.generator.utils.CommonUtils;
  */
 public class ThriftMethodArg {
 	
-	private Object type;//to string
-	
 	private ThriftType thriftType;
 	
 	private Generic generic;
 	
 	private String name;
-	
-	private List<Class<?>> relationClasses = new ArrayList<Class<?>>();
 
 	/**
 	 * 
@@ -59,29 +53,6 @@ public class ThriftMethodArg {
 	}
 	
 	/**
-	 * @return the type
-	 */
-	public Object getType() {
-		if(type instanceof ThriftType) {
-			return ((ThriftType) type).getValue();
-		}
-		String desc = CommonUtils.convertJavaToThrift(type.toString());
-		for (Class<?> clazz : this.getRelationClasses()) {
-			if(desc.indexOf(clazz.getName()) != -1) {
-				desc = desc.replace(clazz.getName(), clazz.getSimpleName());
-			}
-		}
-		return desc;
-	}
-
-	/**
-	 * @param type the type to set
-	 */
-	public void setType(Object type) {
-		this.type = type;
-	}
-
-	/**
 	 * @return the name
 	 */
 	public String getName() {
@@ -93,20 +64,6 @@ public class ThriftMethodArg {
 	 */
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	/**
-	 * @return the relationClasses
-	 */
-	public List<Class<?>> getRelationClasses() {
-		return relationClasses;
-	}
-
-	/**
-	 * @param relationClasses the relationClasses to set
-	 */
-	public void setRelationClasses(List<Class<?>> relationClasses) {
-		this.relationClasses = relationClasses;
 	}
 
 	/**

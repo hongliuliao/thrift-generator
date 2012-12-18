@@ -3,6 +3,8 @@
  */
 package com.sohu.thrift.generator;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,16 +64,43 @@ public class Generic extends ThriftType {
 			return "";
 		}
 		StringBuilder sb = new StringBuilder("<");
-		for (Object type : types) {
+		for (int i = 0; i < types.size(); i++) {
+			Object type = types.get(i);
 			if(type instanceof Generic) {
-				sb.append(type.toString());
+				sb.append(((Generic) type).toThriftString());
 			}else {
 				ThriftType thriftType = (ThriftType) type;
 				sb.append(thriftType.getValue());
 			}
+			if(i != types.size() - 1) {
+				sb.append(", ");
+			}
 		}
 		sb.append(">");
 		return sb.toString();
+	}
+	
+	public static Generic fromType(Type type) {
+		if(!(type instanceof ParameterizedType)) {
+			return null;
+		}
+		Generic generic = new Generic();
+		ParameterizedType parameterizedType = (ParameterizedType) type;
+		Type[] types = parameterizedType.getActualTypeArguments();
+		for (Type type2 : types) {
+			if(type2 instanceof ParameterizedType) {
+				generic.addGeneric(fromType(type2));
+				continue;
+			}
+			ThriftType thriftType = ThriftType.fromJavaType((Class<?>)type2);
+			if(thriftType == ThriftType.STRUCT) {
+				thriftType = thriftType.clone();
+				thriftType.setJavaClass((Class<?>)type2);
+				thriftType.setValue(((Class<?>)type2).getSimpleName());
+			}
+			generic.addGeneric(thriftType);
+		}
+		return generic;
 	}
 	
 }

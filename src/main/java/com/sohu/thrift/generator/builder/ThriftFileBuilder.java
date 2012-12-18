@@ -93,19 +93,16 @@ public class ThriftFileBuilder {
 	 */
 	private List<ThriftMethodArg> buildThriftMethodArgs(List<ThriftStruct> structs, Type[] paramTypes, String[] paramNames, List<ThriftEnum> enums) {
 		List<ThriftMethodArg> methodArgs = new ArrayList<ThriftMethodArg>();
-		for (int i=0;i<paramTypes.length;i++) {
+		for (int i = 0; i < paramTypes.length; i++) {
 			ThriftMethodArg methodArg = new ThriftMethodArg();
 			methodArg.setName(paramNames == null || paramNames.length == 0 ? ("arg" + i) : paramNames[i]);
 
-			Type paramType2 = paramTypes[i];
-			if(paramType2 instanceof ParameterizedType) {
-				methodArg.setType(paramType2);
-				methodArg.setRelationClasses(CommonUtils.getMethodArgsRelationClasses(paramType2));
-			}else if(isBasicType((Class<?>) paramType2) || isCollectionType((Class<?>) paramType2)) {
-				methodArg.setType(ThriftType.fromJavaType((Class<?>) paramType2));
-			}else {
-				methodArg.setType(((Class<?>)paramType2).getSimpleName());
-				this.buildThriftStruct((Class<?>)paramType2, structs, enums);
+			Type paramType = paramTypes[i];
+			ThriftType paramThriftType = ThriftType.fromJavaType(paramType);
+			methodArg.setThriftType(paramThriftType);
+			methodArg.setGeneric(Generic.fromType(paramType));
+			if(paramThriftType.isStruct()) {
+				this.buildThriftStruct((Class<?>)paramType, structs, enums);
 			}
 			methodArgs.add(methodArg);
 		}

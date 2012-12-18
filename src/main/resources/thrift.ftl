@@ -26,7 +26,7 @@
 <#list serviceList as service>
 	service ${service.name} {
 		 <#list service.methods as method>
-		 	${method.returnType} ${method.name}(<#list method.methodArgs as arg>${arg_index + 1}:${arg.type} ${arg.name}<#if arg_has_next>,</#if></#list>)<#if method_has_next>,</#if>
+		 	${method.returnType} ${method.name}(<#list method.methodArgs as arg>${arg_index + 1}:${arg.thriftType.value}<#if arg.generic ??>${arg.generic.toThriftString()}</#if> ${arg.name}<#if arg_has_next>,</#if></#list>)<#if method_has_next>,</#if>
 		 </#list>
 	}
 </#list>
