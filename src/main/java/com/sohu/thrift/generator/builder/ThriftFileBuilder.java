@@ -211,7 +211,7 @@ public class ThriftFileBuilder {
 			ThriftType thriftType = ThriftType.fromProtoType(fieldDescriptor);
 			
 			String fieldName = CommonUtils.underlineField2JavaField(fieldDescriptor.getName());
-			Field field = CommonUtils.findField(clazz, fieldName + "_");
+			Field field = CommonUtils.findField(clazz, CommonUtils.getFirstLower(fieldName + "_"));
 			thriftType.setJavaTypeName(field.getType().getSimpleName());
 			if(thriftType.isEnum()) {
 				buildEnumForProto(enums, fieldDescriptor, field);
@@ -233,9 +233,6 @@ public class ThriftFileBuilder {
 
 	private Method getGetMethod(Class<?> clazz, ThriftType thriftType, FieldDescriptor fieldDescriptor) {
 		String methodPrefix = "get";
-		if(thriftType.getValue().equals("bool")) {
-			methodPrefix = "is";
-		}
 		String getMethodName = methodPrefix + CommonUtils.getFirstUpper(CommonUtils.column2PropertyName(fieldDescriptor.getName()));
 		return CommonUtils.findMethodByName(clazz, getMethodName);
 	} 
