@@ -245,6 +245,19 @@ public class CommonUtils {
 		return javaField.toString();
 	}
 	
+	public static String column2PropertyName(String columnName) {
+		if(columnName.indexOf("_") == -1) {
+			return columnName;
+		}
+//		按"_"分割之后让首字母大写(除了第一个单词)
+		String[] names=columnName.toLowerCase().split("_");
+		StringBuffer javaField=new StringBuffer(names[0]);
+		for(int i=1;i<names.length;i++){
+			javaField.append(getFirstUpper(names[i]));
+		}
+		return javaField.toString();
+	}
+	
 	public static String getFirstUpper(String str){
 		return str.substring(0, 1).toUpperCase()+str.substring(1);
 	}

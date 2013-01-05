@@ -236,7 +236,7 @@ public class ThriftFileBuilder {
 		if(thriftType.getValue().equals("bool")) {
 			methodPrefix = "is";
 		}
-		String getMethodName = methodPrefix + CommonUtils.getFirstUpper(fieldDescriptor.getName());
+		String getMethodName = methodPrefix + CommonUtils.getFirstUpper(CommonUtils.column2PropertyName(fieldDescriptor.getName()));
 		return CommonUtils.findMethodByName(clazz, getMethodName);
 	} 
 	
