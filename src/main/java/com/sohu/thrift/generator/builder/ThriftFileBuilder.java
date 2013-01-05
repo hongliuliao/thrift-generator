@@ -222,13 +222,24 @@ public class ThriftFileBuilder {
 			if(thriftType.isStruct()) {
 				structs.add(buildThriftStructForThrift(field.getType(), structs, enums));
 			}
-			thriftField.setGenericType(Generic.fromType(field.getGenericType()));
+			
+			Method getMethod = this.getGetMethod(clazz, thriftType, fieldDescriptor);
+			thriftField.setGenericType(Generic.fromType(getMethod.getGenericReturnType()));
 			fields.add(thriftField);
 		}
 		struct.setFields(fields);
 		return struct;
 	}
 
+	private Method getGetMethod(Class<?> clazz, ThriftType thriftType, FieldDescriptor fieldDescriptor) {
+		String methodPrefix = "get";
+		if(thriftType.getValue().equals("bool")) {
+			methodPrefix = "is";
+		}
+		String getMethodName = methodPrefix + CommonUtils.getFirstUpper(fieldDescriptor.getName());
+		return CommonUtils.findMethodByName(clazz, getMethodName);
+	} 
+	
 	/**
 	 * @param enums
 	 * @param fieldDescriptor
