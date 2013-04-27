@@ -18,8 +18,7 @@ public class ThriftStructBuilderTest {
 	
 	@Test
 	public void toOutputstream() throws Exception {
-		fileBuilder.setCommonServiceClass(ICommonUserService.class);
-		this.fileBuilder.buildToOutputStream(System.out);
+		this.fileBuilder.buildToOutputStream(ICommonUserService.class, System.out);
 	}
 	
 }

@@ -13,10 +13,6 @@ import java.util.Set;
 import org.apache.commons.lang.StringUtils;
 import org.apache.thrift.protocol.TType;
 
-import com.google.protobuf.Descriptors.EnumValueDescriptor;
-import com.google.protobuf.Descriptors.FieldDescriptor;
-import com.google.protobuf.Descriptors.FieldDescriptor.JavaType;
-
 /**
  * @author hongliuliao
  *
@@ -123,49 +119,6 @@ public class ThriftType implements Cloneable {
 		return fromJavaType(clazz);
 	}
 	
-	public static ThriftType fromProtoType(FieldDescriptor descriptor) {
-		if(descriptor.isRepeated()) {
-			return LIST;
-		}
-		return fromProtoType(descriptor.getJavaType());
-	}
-	
-	/**
-	 * 因为可能存在检测不到list的情况,请使用public static ThriftType fromProtoType(FieldDescriptor descriptor)
-	 * @param javaType
-	 * @return
-	 */
-	@Deprecated
-	public static ThriftType fromProtoType(JavaType javaType) {
-		if(javaType == JavaType.BOOLEAN) {
-			return BOOL;
-		}
-		if(javaType == JavaType.BYTE_STRING) {
-			return STRING;
-		}
-		if(javaType == JavaType.DOUBLE) {
-			return DOUBLE;
-		}
-		if(javaType == JavaType.ENUM) {
-			return ENUM;
-		}
-		if(javaType == JavaType.FLOAT) {
-			return DOUBLE;
-		}
-		if(javaType == JavaType.INT) {
-			return I32;
-		}
-		if(javaType == JavaType.LONG) {
-			return I64;
-		}
-		if(javaType == JavaType.MESSAGE) {
-			return STRUCT;
-		}
-		if(javaType == JavaType.STRING) {
-			return STRING;
-		}
-		throw new RuntimeException("Unkonw type :" + javaType);
-	}
 	
 	public static ThriftType fromJavaType(Class<?> clazz) {
 		if(clazz == short.class || clazz == Short.class) {
@@ -196,9 +149,6 @@ public class ThriftType implements Cloneable {
 			return MAP;
 		}
 		if(clazz.isEnum()) {
-			return ENUM;
-		}
-		if(clazz == EnumValueDescriptor.class) {
 			return ENUM;
 		}
 		if(!clazz.getName().startsWith("java.lang")) {

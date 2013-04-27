@@ -20,10 +20,6 @@ import java.util.Set;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.google.protobuf.Descriptors.FieldDescriptor;
-import com.google.protobuf.Message;
-import com.google.protobuf.Message.Builder;
-
 /**
  * It is CommontUtils?? May be call ReflectionUtils is better? :)
  * @author hongliuliao
@@ -100,16 +96,6 @@ public class CommonUtils {
 		return methodMap.get(methodName);
 	}
 	
-	/**
-	 * @param protoClass
-	 * @return
-	 */
-	public static Builder getBuilder(Class<?> protoClass) {
-		Method newBuildMethod = findMethod(protoClass, "newBuilder");
-		Object builder = invokeMethod(newBuildMethod, protoClass);
-		return (Builder) builder;
-	}
-	
 	public static Method findMethod(Class<?> clazz, String methodName, Class<?>... paramTypes) {
 		try {
 			return clazz.getDeclaredMethod(methodName, paramTypes);
@@ -132,10 +118,6 @@ public class CommonUtils {
 		} catch (Exception e) {
 			throw new RuntimeException("invoke target error!", e);
 		}
-	}
-	
-	public static List<FieldDescriptor> getFieldDescriptors(Message.Builder builder) {
-		return builder.getDescriptorForType().getFields();
 	}
 	
 	public static Class<?>[] getFieldGenericType(Field field) {
