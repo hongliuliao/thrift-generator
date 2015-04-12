@@ -40,7 +40,8 @@ public class ThriftStructBuilder {
 		List<ThriftType> thriftTypes = generic.getTypes();
 		for (ThriftType subThriftType : thriftTypes) {
 			if(subThriftType.isStruct()) {
-				buildThriftStruct(subThriftType.getJavaClass(), structs, enums);
+			    ThriftStruct subStruct = buildThriftStruct(subThriftType.getJavaClass(), structs, enums);
+			    structs.add(subStruct);
 			}
 			if(subThriftType instanceof Generic) {
 				this.buildStrutsByGeneric(structs, (Generic) subThriftType, enums);

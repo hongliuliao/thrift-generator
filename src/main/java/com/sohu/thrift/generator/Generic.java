@@ -106,7 +106,7 @@ public class Generic extends ThriftType {
 				continue;
 			}
 			ThriftType typeArgumentThriftType = ThriftType.fromJavaType((Class<?>)typeArgument);
-			if(typeArgumentThriftType == ThriftType.STRUCT) {
+			if(typeArgumentThriftType.isStruct()) {
 				typeArgumentThriftType = typeArgumentThriftType.clone();
 				typeArgumentThriftType.setJavaClass((Class<?>)typeArgument);
 				typeArgumentThriftType.setValue(((Class<?>)typeArgument).getSimpleName());
