@@ -57,7 +57,7 @@ public class ThriftStructBuilder {
 		List<ThriftEnumField> nameValues = new ArrayList<ThriftEnumField>();
 		for (int i = 0;i < fields.length;i ++) {
 			Field field = fields[i];
-			if(field.getName().equals("ENUM$VALUES") || field.getName().equals("__PARANAMER_DATA")) {
+			if(field.getName().equals("$VALUES") || field.getName().equals("__PARANAMER_DATA")) {
 				continue;
 			}
 			ThriftEnumField nameValue = new ThriftEnumField(field.getName(), i);
