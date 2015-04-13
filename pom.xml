@@ -60,8 +60,9 @@
 			            <configuration>
 			                <sourceDirectory>${project.build.testSourceDirectory}</sourceDirectory>
 			                <outputDirectory>${project.build.testOutputDirectory}</outputDirectory>
-			            </configuration>        
-			             <goals>
+			            </configuration>       
+			            <phase>test-compile</phase> 
+			            <goals>
 			                <goal>generate</goal>
 			            </goals>
 			        </execution>
