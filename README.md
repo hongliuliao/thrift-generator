@@ -37,14 +37,16 @@ public class ThriftStructBuilderTest {
 	
 }
 ```
-### 执行之后会在控制台输入如下:
+### 执行之后会在控制台输入如下: 
+```mvn test -Dtest=com.sohu.thrift.generator.builder.ThriftStructBuilderTest```
 ```thrift
 
 	namespace java com.sohu.thrift.generator.test.thrift
 
 	enum Status {
 			NORMAL = 0,
-			BLOCKED = 1
+			BLOCKED = 1,
+			$VALUES = 2
 	}
 
 	struct Account {
@@ -61,14 +63,15 @@ public class ThriftStructBuilderTest {
 	}
 
 	service ICommonUserService {
-		 	User login(1:i32 arg0,2:string arg1),
-		 	map<string, list<User>> getUsersByName(1:list<string> arg0),
-		 	bool saveUser(1:User arg0),
-		 	map<i64, User> getUserByIds(1:list<User> arg0),
-		 	list<User> getUserIds(1:i64 arg0),
-		 	map<i64, list<i64>> getGroupUsers(1:list<string> arg0,2:list<User> arg1,3:list<i64> arg2,4:i64 arg3),
-		 	User getUserById(1:i64 arg0),
-		 	list<string> testCase1(1:map<i32, string> arg0,2:list<User> arg1,3:list<string> arg2,4:i64 arg3,5:string arg4)
+		 	list<User> getUserIds(1:i64 id),
+		 	User login(1:i32 id,2:string name),
+		 	map<string, list<User>> getUsersByName(1:list<string> names),
+		 	map<i64, list<i64>> getGroupUsers(1:list<string> names,2:list<User> userList,3:list<i64> lns,4:i64 ll),
+		 	map<i64, User> getUserByIds(1:list<User> ids),
+		 	list<string> testCase1(1:map<i32, string> num1,2:list<User> num2,3:list<string> num3,4:i64 num4,5:string num5),
+		 	User getUserById(1:i64 id),
+		 	bool saveUser(1:User user)
 	}
+
 
 ```
