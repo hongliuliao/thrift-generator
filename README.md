@@ -45,8 +45,7 @@ public class ThriftStructBuilderTest {
 
 	enum Status {
 			NORMAL = 0,
-			BLOCKED = 1,
-			$VALUES = 2
+			BLOCKED = 1
 	}
 
 	struct Account {
