@@ -48,4 +48,25 @@
 			<version>2.3</version>
 		</dependency>
 	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+			    <groupId>com.thoughtworks.paranamer</groupId>
+			    <artifactId>paranamer-maven-plugin</artifactId>
+			    <version>2.3</version>
+			    <executions>
+			        <execution>
+			            <id>run</id>  <!-- id is optional -->
+			            <configuration>
+			                <sourceDirectory>${project.build.testSourceDirectory}</sourceDirectory>
+			                <outputDirectory>${project.build.testOutputDirectory}</outputDirectory>
+			            </configuration>        
+			             <goals>
+			                <goal>generate</goal>
+			            </goals>
+			        </execution>
+			    </executions>
+			</plugin>
+		</plugins>
+	</build>
 </project>
