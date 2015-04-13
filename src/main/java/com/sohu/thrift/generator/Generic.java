@@ -90,7 +90,6 @@ public class Generic extends ThriftType {
 			ThriftType thriftType = ThriftType.fromJavaType(type);
 			generic.setJavaClass(thriftType.getJavaClass());
 			generic.setJavaTypeName(thriftType.getJavaTypeName());
-			generic.settType(thriftType.gettType());
 			generic.setValue(thriftType.getValue());
 			generic.setWarpperClassName(thriftType.getWarpperClassName());
 			generic.setType(thriftType.getType());

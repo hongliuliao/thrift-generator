@@ -10,9 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.thrift.protocol.TType;
-
 /**
  * @author hongliuliao
  *
@@ -26,19 +23,19 @@ public class ThriftType implements Cloneable {
 	public static final int VOID_TYPE = 1 << 3;
 	public static final int ENUM_TYPE = 1 << 4;
 	
-	public static final ThriftType BOOL = new ThriftType("bool", BASIC_TYPE, "boolean", "Boolean", TType.BOOL);
-	public static final ThriftType BYTE = new ThriftType("byte", BASIC_TYPE, "byte", "Byte", TType.BYTE);
-	public static final ThriftType I16 = new ThriftType("i16", BASIC_TYPE, "short", "Short", TType.I16); 
-	public static final ThriftType I32 = new ThriftType("i32", BASIC_TYPE, "int", "Integer", TType.I32); 
-	public static final ThriftType I64 = new ThriftType("i64", BASIC_TYPE, "long", "Long", TType.I64);
-	public static final ThriftType DOUBLE = new ThriftType("double", BASIC_TYPE, "double", "Double", TType.DOUBLE);
-	public static final ThriftType STRING = new ThriftType("string", BASIC_TYPE, "String", "String", TType.STRING); 
-	public static final ThriftType LIST = new ThriftType("list", COLLECTION_TYPE, "List", TType.LIST);  
-	public static final ThriftType SET = new ThriftType("set", COLLECTION_TYPE, "Set", TType.SET);  
-	public static final ThriftType MAP = new ThriftType("map", COLLECTION_TYPE, "Map", TType.MAP); 
-	public static final ThriftType ENUM = new ThriftType("enum", ENUM_TYPE, "enum", "Enum", TType.ENUM); 
-	public static final ThriftType VOID = new ThriftType("void", VOID_TYPE, "void", "Void", TType.VOID); 
-	public static final ThriftType STRUCT = new ThriftType("struct", STRUCT_TYPE, "class", "Class", TType.STRUCT);
+	public static final ThriftType BOOL = new ThriftType("bool", BASIC_TYPE, "boolean", "Boolean");
+	public static final ThriftType BYTE = new ThriftType("byte", BASIC_TYPE, "byte", "Byte");
+	public static final ThriftType I16 = new ThriftType("i16", BASIC_TYPE, "short", "Short"); 
+	public static final ThriftType I32 = new ThriftType("i32", BASIC_TYPE, "int", "Integer"); 
+	public static final ThriftType I64 = new ThriftType("i64", BASIC_TYPE, "long", "Long");
+	public static final ThriftType DOUBLE = new ThriftType("double", BASIC_TYPE, "double", "Double");
+	public static final ThriftType STRING = new ThriftType("string", BASIC_TYPE, "String", "String"); 
+	public static final ThriftType LIST = new ThriftType("list", COLLECTION_TYPE, "List");  
+	public static final ThriftType SET = new ThriftType("set", COLLECTION_TYPE, "Set");  
+	public static final ThriftType MAP = new ThriftType("map", COLLECTION_TYPE, "Map"); 
+	public static final ThriftType ENUM = new ThriftType("enum", ENUM_TYPE, "enum", "Enum"); 
+	public static final ThriftType VOID = new ThriftType("void", VOID_TYPE, "void", "Void"); 
+	public static final ThriftType STRUCT = new ThriftType("struct", STRUCT_TYPE, "class", "Class");
 	
 	private String value;
 	
@@ -50,7 +47,6 @@ public class ThriftType implements Cloneable {
 	
 	private String warpperClassName;
 	
-	private byte tType;
 	/**
 	 * 
 	 */
@@ -63,11 +59,10 @@ public class ThriftType implements Cloneable {
 	 * @param isCollection
 	 * @param javaTypeName
 	 */
-	private ThriftType(String value, int type, String javaTypeName, byte ttype) {
+	private ThriftType(String value, int type, String javaTypeName) {
 		this.value = value;
 		this.type = type;
 		this.javaTypeName = javaTypeName;
-		this.tType = ttype;
 	}
 
 	/**
@@ -77,29 +72,13 @@ public class ThriftType implements Cloneable {
 	 * @param warpperClassName
 	 */
 	private ThriftType(String value, int type, String javaTypeName,
-			String warpperClassName, byte ttype) {
+			String warpperClassName) {
 		this.value = value;
 		this.type = type;
 		this.javaTypeName = javaTypeName;
 		this.warpperClassName = warpperClassName;
-		this.tType = ttype;
 	}
 	
-	public byte getSerializeTtype() {
-		if(tType == TType.ENUM) {
-			return TType.I32;
-		}
-		return tType;
-	}
-	
-	public byte gettType() {
-		return tType;
-	}
-
-	public void settType(byte tType) {
-		this.tType = tType;
-	}
-
 	@Override
 	public ThriftType clone() {
 		try {
@@ -209,7 +188,7 @@ public class ThriftType implements Cloneable {
 	 * @return the javaTypeName
 	 */
 	public String getJavaTypeName() {
-		if(StringUtils.isNotBlank(javaTypeName)) {
+		if(javaTypeName != null && !javaTypeName.isEmpty()) {
 			return javaTypeName;
 		}
 		if(isStruct()) {
