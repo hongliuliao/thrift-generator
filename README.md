@@ -37,8 +37,9 @@ public class ThriftStructBuilderTest {
 	
 }
 ```
-### 执行之后会在控制台输入如下: 
+### 执行: 
 ```mvn test -Dtest=com.sohu.thrift.generator.builder.ThriftStructBuilderTest```
+### 之后会在控制台输入如下: 
 ```thrift
 
 	namespace java com.sohu.thrift.generator.test.thrift

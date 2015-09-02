@@ -20,7 +20,10 @@
 <#list serviceList as service>
 	service ${service.name} {
 		 <#list service.methods as method>
-		 	${method.returnGenericType.toThriftString()} ${method.name}(<#list method.methodArgs as arg>${arg_index + 1}:${arg.genericType.toThriftString()} ${arg.name}<#if arg_has_next>,</#if></#list>)<#if method_has_next>,</#if>
+		 	${method.returnGenericType.toThriftString()} ${method.name}<@compress single_line=true>
+			(<#list method.methodArgs as arg>${arg_index + 1}:${arg.genericType.toThriftString()} ${arg.name}<#if arg_has_next>, </#if></#list>)<#if method_has_next>,</#if>
+			</@compress>
+		        	
 		 </#list>
 	}
 </#list>
