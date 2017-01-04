@@ -25,6 +25,12 @@ import freemarker.template.Template;
  * createTime:2012-11-23 上午11:33:35
  */
 public class ThriftFileBuilder {
+
+    private ThriftServiceBuilder serviceBuilder;
+
+    public ThriftFileBuilder() {
+		serviceBuilder = new ThriftServiceBuilder();
+    }
 	
 	public String getPackageName(Class<?> commonServiceClass) {
 		String packageName = commonServiceClass.getPackage().getName();
@@ -38,7 +44,7 @@ public class ThriftFileBuilder {
 		Template template = cfg.getTemplate("thrift.ftl");
 		Writer out = new OutputStreamWriter(os);
 		
-		ThriftServiceBuilder serviceBuilder = new ThriftServiceBuilder(commonServiceClass);
+        serviceBuilder.setServiceClass(commonServiceClass);
 		ThriftService service = serviceBuilder.buildThriftService();
 		
 		Map<String, Object> rootMap = new HashMap<String, Object>();
@@ -53,5 +59,9 @@ public class ThriftFileBuilder {
 		
 		template.process(rootMap, out);
 	}
+
+    public void setIncludeSuper(boolean isInclude) {
+        this.serviceBuilder.setIncludeSuper(isInclude);
+    }
 	
 }

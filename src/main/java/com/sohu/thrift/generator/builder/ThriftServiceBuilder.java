@@ -8,6 +8,8 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import com.sohu.thrift.generator.Generic;
 import com.sohu.thrift.generator.ThriftEnum;
 import com.sohu.thrift.generator.ThriftMethod;
@@ -27,17 +29,23 @@ import com.sohu.thrift.generator.utils.ParameterNameDiscoverer;
 public class ThriftServiceBuilder {
 	
 	private static final ParameterNameDiscoverer parameterNameDiscoverer = new ParameterNameDiscoverer();
+
+    private static Logger log = Logger.getLogger(ThriftServiceBuilder.class);
 	
-	private ThriftStructBuilder thriftStructBuilder = new ThriftStructBuilder();
+	private ThriftStructBuilder thriftStructBuilder;
 	
 	protected Class<?> commonServiceClass;
+
+    private boolean isIncludeSuper;
 	
 	List<ThriftStruct> structs = new ArrayList<ThriftStruct>();
 	List<ThriftEnum> enums = new ArrayList<ThriftEnum>();
 	
-	public ThriftServiceBuilder(Class<?> commonServiceClass) {
+	public ThriftServiceBuilder() {
 		super();
 		this.commonServiceClass = commonServiceClass;
+        isIncludeSuper = true;
+        thriftStructBuilder = new ThriftStructBuilder();
 	}
 
 	public ThriftService buildThriftService() {
@@ -84,16 +92,13 @@ public class ThriftServiceBuilder {
 		
 		List<Class<?>> classes = CommonUtils.getMethodReturnTypeRelationClasses(method);
 		for (Class<?> class1 : classes) {
-			structs.add(thriftStructBuilder.buildThriftStruct(class1, structs, enums));
+			thriftStructBuilder.buildThriftStruct(class1, structs, enums);
 		}
 		
 		Class<?> returnClass = method.getReturnType();
 		ThriftType thriftType = ThriftType.fromJavaType(returnClass);
-		if(thriftType.isStruct()) {
-			ThriftStruct struct = thriftStructBuilder.buildThriftStruct(returnClass, structs, enums);
-			if(struct != null) {
-				structs.add(struct);
-			}
+		if (thriftType.isStruct()) {
+			thriftStructBuilder.buildThriftStruct(returnClass, structs, enums);
 		}
 		
 		Class<?>[] argClasses = method.getParameterTypes();
@@ -111,6 +116,7 @@ public class ThriftServiceBuilder {
 			}
 			thriftStructBuilder.buildThriftStruct(genericType, structs, enums);
 		}
+        log.info("get arg class size:" + argClasses.length);
 		
 		for (Class<?> clazz : argClasses) {
 			if(this.isBasicType(clazz)) {
@@ -119,6 +125,7 @@ public class ThriftServiceBuilder {
 			if(this.isCollectionType(clazz)) {
 				continue;
 			}
+            log.debug(" start build method arg class :" + clazz);
 			thriftStructBuilder.buildThriftStruct(clazz, structs, enums);
 		}
 		
@@ -155,4 +162,13 @@ public class ThriftServiceBuilder {
 	public List<ThriftEnum> getEnums() {
 		return enums;
 	}
+
+    public void setIncludeSuper(boolean isInclude) {
+        this.isIncludeSuper = isInclude;
+        this.thriftStructBuilder.setIncludeSuperField(isInclude);
+    }
+
+    public void setServiceClass(Class<?> service) {
+        this.commonServiceClass = service;
+    }
 }

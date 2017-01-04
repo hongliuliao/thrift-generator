@@ -29,7 +29,7 @@ public class ThriftFieldBuilder {
 				generic.setValue(field.getType().getSimpleName());
 				generic.setJavaTypeName(field.getType().getSimpleName());
 				if(generic.isStruct()) {
-					structs.add(structBuilder.buildThriftStruct(field.getType(), structs, enums));
+					structBuilder.buildThriftStruct(field.getType(), structs, enums);
 				}else {
 					enums.add(structBuilder.buildThriftEnum(field.getType()));
 				}
