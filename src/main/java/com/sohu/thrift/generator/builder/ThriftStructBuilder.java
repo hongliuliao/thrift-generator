@@ -1,8 +1,11 @@
 package com.sohu.thrift.generator.builder;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 
@@ -25,7 +28,21 @@ public class ThriftStructBuilder {
         isIncludeSuperField = true;
     }
 	
-	public ThriftStruct buildThriftStruct(Class<?> clazz, List<ThriftStruct> structs, List<ThriftEnum> enums) {
+    public ThriftStruct buildThriftStruct(Class<?> clazz, 
+            List<ThriftStruct> structs, 
+            List<ThriftEnum> enums) {
+        // check class type
+        TypeVariable[] typeVar = clazz.getTypeParameters();
+        if (typeVar != null && typeVar.length != 0) {
+            if (!List.class.isAssignableFrom(clazz) &&
+                    !Set.class.isAssignableFrom(clazz) &&
+                    !Map.class.isAssignableFrom(clazz)) {
+                StringBuilder tip = new StringBuilder();
+                tip.append("Current class:" + clazz.getName());
+                throw new IllegalArgumentException("only list/set/map support generic!" 
+                        + tip.toString());
+            }
+        }
         List<Field> fields = new ArrayList<Field>();
         
         if (isIncludeSuperField) {
@@ -68,14 +85,14 @@ public class ThriftStructBuilder {
 	public void buildStrutsByGeneric(List<ThriftStruct> structs,
 			Generic generic, List<ThriftEnum> enums) {
 		List<ThriftType> thriftTypes = generic.getTypes();
-		for (ThriftType subThriftType : thriftTypes) {
-			if(subThriftType.isStruct()) {
-			    buildThriftStruct(subThriftType.getJavaClass(), structs, enums);
-			}
-			if(subThriftType instanceof Generic) {
-				this.buildStrutsByGeneric(structs, (Generic) subThriftType, enums);
-			}
-		}
+        for (ThriftType subThriftType : thriftTypes) {
+            if (subThriftType.isStruct()) {
+                buildThriftStruct(subThriftType.getJavaClass(), structs, enums);
+            }
+            if (subThriftType instanceof Generic) {
+                this.buildStrutsByGeneric(structs, (Generic) subThriftType, enums);
+            }
+        }
 	}
 	
 	public ThriftEnum buildThriftEnum(Class<?> clazz) {
@@ -86,7 +103,7 @@ public class ThriftStructBuilder {
 		List<ThriftEnumField> nameValues = new ArrayList<ThriftEnumField>();
 		for (int i = 0;i < fields.length;i ++) {
 			Field field = fields[i];
-			if(field.getName().equals("$VALUES") || field.getName().equals("__PARANAMER_DATA")) {
+			if (field.getName().equals("$VALUES") || field.getName().equals("__PARANAMER_DATA")) {
 				continue;
 			}
 			ThriftEnumField nameValue = new ThriftEnumField(field.getName(), i);
