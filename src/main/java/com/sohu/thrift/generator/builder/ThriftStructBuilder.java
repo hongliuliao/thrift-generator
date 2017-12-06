@@ -47,7 +47,7 @@ public class ThriftStructBuilder {
         
         if (isIncludeSuperField) {
             Class<?> superClass = clazz.getSuperclass();
-            while (superClass != null && superClass != Object.class) {
+            while (superClass != null && !superClass.getName().startsWith("java.lang")) {
                 log.debug("include super class field, class:" + clazz.getSuperclass());
                 Field[] sf = superClass.getDeclaredFields();
                 for (Field s : sf) {
@@ -73,6 +73,7 @@ public class ThriftStructBuilder {
 		}
 		struct.setName(clazz.getSimpleName());
 		struct.setFields(thriftFields);
+		struct.setPeerClass(clazz);
         structs.add(struct);
 
 		return struct;
@@ -103,7 +104,9 @@ public class ThriftStructBuilder {
 		List<ThriftEnumField> nameValues = new ArrayList<ThriftEnumField>();
 		for (int i = 0;i < fields.length;i ++) {
 			Field field = fields[i];
-			if (field.getName().equals("ENUM$VALUES") || field.getName().equals("__PARANAMER_DATA")) {
+			if (field.getName().equals("ENUM$VALUES") ||
+					field.getName().equals("$VALUES") ||
+					field.getName().equals("__PARANAMER_DATA")) {
 				continue;
 			}
 			ThriftEnumField nameValue = new ThriftEnumField(field.getName(), i);

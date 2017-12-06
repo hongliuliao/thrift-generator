@@ -115,6 +115,9 @@ public class ThriftType implements Cloneable {
 		if(clazz == boolean.class || clazz == Boolean.class) {
 			return BOOL;
 		}
+		if (clazz == double.class || clazz == Double.class) {
+			return DOUBLE;
+		}
 		if(clazz == Date.class) {
 			return I64;
 		}

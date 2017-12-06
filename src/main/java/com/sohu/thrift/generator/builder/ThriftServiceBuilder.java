@@ -6,6 +6,7 @@ package com.sohu.thrift.generator.builder;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -41,6 +42,7 @@ public class ThriftServiceBuilder {
 	
 	List<ThriftStruct> structs = new ArrayList<ThriftStruct>();
 	List<ThriftEnum> enums = new ArrayList<ThriftEnum>();
+	List<ThriftStruct> exceptions = new ArrayList<ThriftStruct>();
 	
 	public ThriftServiceBuilder() {
 		super();
@@ -69,12 +71,31 @@ public class ThriftServiceBuilder {
 			Type[] paramTypes = method.getGenericParameterTypes();
 			String[] paramNames = parameterNameDiscoverer.getParameterNames(method);
 			List<ThriftMethodArg> methodArgs = buildThriftMethodArgs(structs, paramTypes, paramNames, enums);
-			
 			thriftMethod.setMethodArgs(methodArgs);
+			
+			thriftMethod.setExceptions(this.buildThriftExceptions(method, structs, enums));
+			
 			thriftMethods.add(thriftMethod);
 		}
 		
 		// order by source define order
+		thriftMethods = rebuildBySoureInfo(thriftMethods);
+		
+		// mv exceptions from common struct to exceptions
+		for (Iterator<ThriftStruct> i = structs.iterator(); i.hasNext();) {
+			ThriftStruct ts = i.next();
+			if (Throwable.class.isAssignableFrom(ts.getPeerClass())) {
+				exceptions.add(ts);
+				i.remove();
+			}
+		}
+		
+		service.setName(commonServiceClass.getSimpleName());
+		service.setMethods(thriftMethods);
+		return service;
+	}
+
+	private List<ThriftMethod> rebuildBySoureInfo(List<ThriftMethod> thriftMethods) {
 		if (this.srcDir != null) {
 			List<JavaMethod> ms = CommonUtils.getMethodsFromSource(srcDir, this.commonServiceClass);
 			if (!ms.isEmpty() && ms.size() == thriftMethods.size()) {
@@ -93,10 +114,7 @@ public class ThriftServiceBuilder {
 				log.warn("get method order fail, ms size:" + ms.size());
 			}
 		}
-		
-		service.setName(commonServiceClass.getSimpleName());
-		service.setMethods(thriftMethods);
-		return service;
+		return thriftMethods;
 	}
 	
 	private boolean isBasicType(Class<?> clazz) {
@@ -175,6 +193,16 @@ public class ThriftServiceBuilder {
 		return methodArgs;
 	}
 	
+	private List<ThriftStruct> buildThriftExceptions(Method method, List<ThriftStruct> structs, List<ThriftEnum> enums) {
+        Type[] ts = method.getGenericExceptionTypes();
+        List<ThriftStruct> tsList = new ArrayList<ThriftStruct>();
+        for (Type t : ts) {
+        	ThriftStruct ths = thriftStructBuilder.buildThriftStruct((Class<?>)t, structs, enums);
+        	tsList.add(ths);
+        }
+        return tsList;
+	}
+	
 	public List<ThriftStruct> getStructs() {
 		return structs;
 	}
@@ -197,6 +225,14 @@ public class ThriftServiceBuilder {
 
 	public void setSrcDir(String srcDir) {
 		this.srcDir = srcDir;
+	}
+
+	public List<ThriftStruct> getExceptions() {
+		return exceptions;
+	}
+
+	public void setExceptions(List<ThriftStruct> exceptions) {
+		this.exceptions = exceptions;
 	}
 
 }

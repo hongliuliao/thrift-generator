@@ -12,7 +12,7 @@ import com.sohu.thrift.generator.test.ICommonUserService;
  *
  * createTime:2012-12-6 下午3:24:05
  */
-public class ThriftStructBuilderTest {
+public class ThriftFileBuilderTest {
 
 	private ThriftFileBuilder fileBuilder = new ThriftFileBuilder();
 	

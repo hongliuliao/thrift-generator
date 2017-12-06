@@ -24,6 +24,8 @@ public class ThriftMethod {
 	
 	private List<Class<?>> relationClasses;
 	
+	private List<ThriftStruct> exceptions;
+	
 	/**
 	 * method define is source code
 	 */
@@ -115,5 +117,13 @@ public class ThriftMethod {
 			return new ArrayList<DocletTag>();
 		}
 		return this.javaMethod.getTags();
+	}
+
+	public List<ThriftStruct> getExceptions() {
+		return exceptions;
+	}
+
+	public void setExceptions(List<ThriftStruct> exceptions) {
+		this.exceptions = exceptions;
 	}
 }

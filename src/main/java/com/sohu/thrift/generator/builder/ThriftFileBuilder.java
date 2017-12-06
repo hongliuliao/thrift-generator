@@ -53,6 +53,8 @@ public class ThriftFileBuilder {
 		List<ThriftEnum> enums = serviceBuilder.getEnums();
 		CommonUtils.removeRepeat(structs);
 		rootMap.put("structList", structs);
+		rootMap.put("exceptions", serviceBuilder.getExceptions());
+
 		rootMap.put("enumList", enums);
 		CommonUtils.removeRepeat(enums);
 		rootMap.put("serviceList", Arrays.asList(service));

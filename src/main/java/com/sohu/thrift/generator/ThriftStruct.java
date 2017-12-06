@@ -15,6 +15,16 @@ public class ThriftStruct {
 	private String name;
 	
 	private List<ThriftField> fields;
+	
+	private Class<?> peerClass;
+
+	public Class<?> getPeerClass() {
+		return peerClass;
+	}
+
+	public void setPeerClass(Class<?> peerClass) {
+		this.peerClass = peerClass;
+	}
 
 	/**
 	 * @return the name

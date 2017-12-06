@@ -19,7 +19,7 @@ public interface ICommonUserService {
 	 * @param name user name
 	 * @return when login success, return login user, fail return null
 	 */
-	public User login(int id, String name);
+	public User login(int id, String name) throws UnkownUserException;
 	
 	public User getUserById(long id);
 	
