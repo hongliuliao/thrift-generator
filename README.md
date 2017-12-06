@@ -26,7 +26,7 @@ public interface ICommonUserService {
 ```
 ```java
 
-public class ThriftStructBuilderTest {
+public class ThriftFileBuilderTest {
 
 	private ThriftFileBuilder fileBuilder = new ThriftFileBuilder();
 	
