@@ -19,6 +19,7 @@ import com.sohu.thrift.generator.ThriftStruct;
 import com.sohu.thrift.generator.ThriftType;
 import com.sohu.thrift.generator.utils.CommonUtils;
 import com.sohu.thrift.generator.utils.ParameterNameDiscoverer;
+import com.thoughtworks.qdox.model.JavaMethod;
 
 /**
  * 
@@ -75,12 +76,13 @@ public class ThriftServiceBuilder {
 		
 		// order by source define order
 		if (this.srcDir != null) {
-			List<String> ms = CommonUtils.getMethodsFromSource(srcDir, this.commonServiceClass);
+			List<JavaMethod> ms = CommonUtils.getMethodsFromSource(srcDir, this.commonServiceClass);
 			if (!ms.isEmpty() && ms.size() == thriftMethods.size()) {
 				List<ThriftMethod> copyMethods = new ArrayList<ThriftMethod>();
-				for (String name : ms) {
+				for (JavaMethod jm : ms) {
 					for (ThriftMethod tm : thriftMethods) {
-						if (tm.getName().equals(name)) { // find the method is src
+						if (tm.getName().equals(jm.getName())) { // find the method is src
+							tm.setJavaMethod(jm);
 							copyMethods.add(tm);
 							break;
 						}

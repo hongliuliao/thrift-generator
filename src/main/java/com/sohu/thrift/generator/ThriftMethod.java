@@ -3,7 +3,11 @@
  */
 package com.sohu.thrift.generator;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import com.thoughtworks.qdox.model.DocletTag;
+import com.thoughtworks.qdox.model.JavaMethod;
 
 /**
  * @author hongliuliao
@@ -19,6 +23,11 @@ public class ThriftMethod {
 	private List<ThriftMethodArg> methodArgs;
 	
 	private List<Class<?>> relationClasses;
+	
+	/**
+	 * method define is source code
+	 */
+	private JavaMethod javaMethod;
 
 	/**
 	 * @return the name
@@ -75,5 +84,36 @@ public class ThriftMethod {
 	public void setReturnGenericType(Generic returnGeneric) {
 		this.returnGenericType = returnGeneric;
 	}
+
+	public JavaMethod getJavaMethod() {
+		return javaMethod;
+	}
+
+	public void setJavaMethod(JavaMethod javaMethod) {
+		this.javaMethod = javaMethod;
+	}
 	
+	public boolean isComments() {
+		if (this.javaMethod == null) {
+			return false;
+		}
+		if (this.javaMethod.getComment() == null && javaMethod.getTags().isEmpty()) {
+			return false;
+		}
+		return true;
+	}
+	
+	public String getComment() {
+		if (this.javaMethod == null || this.javaMethod.getComment() == null) {
+			return "";
+		}
+		return this.javaMethod.getComment();
+	}
+	
+	public List<DocletTag> getDocTags() {
+		if (this.javaMethod == null || this.javaMethod.getTags().isEmpty()) {
+			return new ArrayList<DocletTag>();
+		}
+		return this.javaMethod.getTags();
+	}
 }

@@ -262,18 +262,15 @@ public class CommonUtils {
 		return str.substring(0, 1).toLowerCase()+str.substring(1);
 	}
 	
-	public static List<String> getMethodsFromSource(String dir, Class<?> c) {
+	public static List<JavaMethod> getMethodsFromSource(String dir, Class<?> c) {
 		JavaProjectBuilder builder = new JavaProjectBuilder();
-		List<String> sm = new ArrayList<String>();
 		try {
 			builder.addSourceTree(new File(dir));
 			JavaClass jc = builder.getClassByName(c.getName());
-			for (JavaMethod m : jc.getMethods()) {
-				sm.add(m.getName());
-			}
+			return jc.getMethods();
+			
 		} catch (Exception e) {
 			throw new RuntimeException("get method from path err", e);
 		}
-		return sm;
 	}
 }

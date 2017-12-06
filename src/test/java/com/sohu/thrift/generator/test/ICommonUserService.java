@@ -13,6 +13,12 @@ import java.util.Map;
  */
 public interface ICommonUserService {
 
+	/**
+	 * user login
+	 * @param id user id
+	 * @param name user name
+	 * @return when login success, return login user, fail return null
+	 */
 	public User login(int id, String name);
 	
 	public User getUserById(long id);

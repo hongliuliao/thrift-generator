@@ -16,6 +16,8 @@ public class User {
 	private String name;
 	private boolean sex;
 	private Status status;
+	private double locX;
+	private double locY;
 	
 	private List<Long> ids;
 	
@@ -92,7 +94,17 @@ public class User {
 	public void setAccount(Account account) {
 		this.account = account;
 	}
-	
-	
+	public double getLocX() {
+		return locX;
+	}
+	public void setLocX(double locX) {
+		this.locX = locX;
+	}
+	public double getLocY() {
+		return locY;
+	}
+	public void setLocY(double locY) {
+		this.locY = locY;
+	}
 	
 }
