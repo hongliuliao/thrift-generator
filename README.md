@@ -38,7 +38,7 @@ public class ThriftStructBuilderTest {
 }
 ```
 ### 执行: 
-```mvn test -Dtest=com.sohu.thrift.generator.builder.ThriftStructBuilderTest```
+```mvn test -Dtest=com.sohu.thrift.generator.builder.ThriftFileBuilderTest```
 ### 之后会在控制台输出如下信息: 
 ```thrift
 
