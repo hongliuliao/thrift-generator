@@ -3,6 +3,7 @@
  */
 package com.sohu.thrift.generator.utils;
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -19,6 +20,10 @@ import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+import com.thoughtworks.qdox.JavaProjectBuilder;
+import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.JavaMethod;
 
 /**
  * It is CommontUtils?? May be call ReflectionUtils is better? :)
@@ -107,6 +112,15 @@ public class CommonUtils {
 	public static Field findField(Class<?> clazz, String fieldName) {
 		try {
 			return clazz.getDeclaredField(fieldName);
+		} catch (Exception e) {
+			throw new RuntimeException("Find field error!", e);
+		}
+	}
+	
+    public static String getStaticString(Class<?> clazz, String fieldName) {
+		try {
+			Field f = clazz.getDeclaredField(fieldName);
+            return (String) f.get(clazz);
 		} catch (Exception e) {
 			throw new RuntimeException("Find field error!", e);
 		}
@@ -248,4 +262,18 @@ public class CommonUtils {
 		return str.substring(0, 1).toLowerCase()+str.substring(1);
 	}
 	
+	public static List<String> getMethodsFromSource(String dir, Class<?> c) {
+		JavaProjectBuilder builder = new JavaProjectBuilder();
+		List<String> sm = new ArrayList<String>();
+		try {
+			builder.addSourceTree(new File(dir));
+			JavaClass jc = builder.getClassByName(c.getName());
+			for (JavaMethod m : jc.getMethods()) {
+				sm.add(m.getName());
+			}
+		} catch (Exception e) {
+			throw new RuntimeException("get method from path err", e);
+		}
+		return sm;
+	}
 }

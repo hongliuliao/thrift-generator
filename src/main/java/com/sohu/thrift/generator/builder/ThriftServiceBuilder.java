@@ -35,16 +35,14 @@ public class ThriftServiceBuilder {
 	private ThriftStructBuilder thriftStructBuilder;
 	
 	protected Class<?> commonServiceClass;
-
-    private boolean isIncludeSuper;
+	
+	private String srcDir;
 	
 	List<ThriftStruct> structs = new ArrayList<ThriftStruct>();
 	List<ThriftEnum> enums = new ArrayList<ThriftEnum>();
 	
 	public ThriftServiceBuilder() {
 		super();
-		this.commonServiceClass = commonServiceClass;
-        isIncludeSuper = true;
         thriftStructBuilder = new ThriftStructBuilder();
 	}
 
@@ -54,6 +52,7 @@ public class ThriftServiceBuilder {
 		
 		Method[] methods = commonServiceClass.getDeclaredMethods();
 		List<ThriftMethod> thriftMethods = new ArrayList<ThriftMethod>();
+		
 		for (Method method : methods) {
 			structs.addAll(this.getAllStruct(method, enums));
 			ThriftMethod thriftMethod = new ThriftMethod();
@@ -72,6 +71,25 @@ public class ThriftServiceBuilder {
 			
 			thriftMethod.setMethodArgs(methodArgs);
 			thriftMethods.add(thriftMethod);
+		}
+		
+		// order by source define order
+		if (this.srcDir != null) {
+			List<String> ms = CommonUtils.getMethodsFromSource(srcDir, this.commonServiceClass);
+			if (!ms.isEmpty() && ms.size() == thriftMethods.size()) {
+				List<ThriftMethod> copyMethods = new ArrayList<ThriftMethod>();
+				for (String name : ms) {
+					for (ThriftMethod tm : thriftMethods) {
+						if (tm.getName().equals(name)) { // find the method is src
+							copyMethods.add(tm);
+							break;
+						}
+					}
+				}
+				thriftMethods = copyMethods;
+			} else {
+				log.warn("get method order fail, ms size:" + ms.size());
+			}
 		}
 		
 		service.setName(commonServiceClass.getSimpleName());
@@ -164,11 +182,19 @@ public class ThriftServiceBuilder {
 	}
 
     public void setIncludeSuper(boolean isInclude) {
-        this.isIncludeSuper = isInclude;
         this.thriftStructBuilder.setIncludeSuperField(isInclude);
     }
 
     public void setServiceClass(Class<?> service) {
         this.commonServiceClass = service;
     }
+    
+    public String getSrcDir() {
+		return srcDir;
+	}
+
+	public void setSrcDir(String srcDir) {
+		this.srcDir = srcDir;
+	}
+
 }

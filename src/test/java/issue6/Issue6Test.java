@@ -3,13 +3,12 @@
  */
 package issue6;
 
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Test;
 
-import com.sohu.thrift.generator.builder.ThriftFileBuilder;
-import com.sohu.thrift.generator.builder.ThriftServiceBuilder;
 import com.sohu.thrift.generator.ThriftService;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertEquals;
+import com.sohu.thrift.generator.builder.ThriftServiceBuilder;
 
 /**
  * @author liao
@@ -17,8 +16,6 @@ import static org.junit.Assert.assertEquals;
  */
 public class Issue6Test {
 
-    private ThriftFileBuilder fileBuilder = new ThriftFileBuilder();
-    
     @Test
     public void testBuildThriftService() throws Exception {
         ThriftServiceBuilder tsb = new ThriftServiceBuilder();
@@ -31,4 +28,5 @@ public class Issue6Test {
         assertEquals("list enum return type fail!", "list<Status>", ls);
         //this.fileBuilder.buildToOutputStream(Issue6Service.class, System.out);
     }
+    
 }

@@ -17,7 +17,8 @@ public class ThriftStructBuilderTest {
 	private ThriftFileBuilder fileBuilder = new ThriftFileBuilder();
 	
 	@Test
-	public void toOutputstream() throws Exception {
+	public void testToOutputstream() throws Exception {
+		this.fileBuilder.setSourceDir("src/test/java");
 		this.fileBuilder.buildToOutputStream(ICommonUserService.class, System.out);
 	}
 	

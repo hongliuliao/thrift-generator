@@ -63,5 +63,9 @@ public class ThriftFileBuilder {
     public void setIncludeSuper(boolean isInclude) {
         this.serviceBuilder.setIncludeSuper(isInclude);
     }
+    
+    public void setSourceDir(String dir) {
+    	this.serviceBuilder.setSrcDir(dir);
+    }
 	
 }

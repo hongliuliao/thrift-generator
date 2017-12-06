@@ -32,7 +32,7 @@ public class ThriftStructBuilder {
             List<ThriftStruct> structs, 
             List<ThriftEnum> enums) {
         // check class type
-        TypeVariable[] typeVar = clazz.getTypeParameters();
+        TypeVariable<?>[] typeVar = clazz.getTypeParameters();
         if (typeVar != null && typeVar.length != 0) {
             if (!List.class.isAssignableFrom(clazz) &&
                     !Set.class.isAssignableFrom(clazz) &&
@@ -103,7 +103,7 @@ public class ThriftStructBuilder {
 		List<ThriftEnumField> nameValues = new ArrayList<ThriftEnumField>();
 		for (int i = 0;i < fields.length;i ++) {
 			Field field = fields[i];
-			if (field.getName().equals("$VALUES") || field.getName().equals("__PARANAMER_DATA")) {
+			if (field.getName().equals("ENUM$VALUES") || field.getName().equals("__PARANAMER_DATA")) {
 				continue;
 			}
 			ThriftEnumField nameValue = new ThriftEnumField(field.getName(), i);
