@@ -3,6 +3,11 @@ thrift-generator
 
 Creating a thrift file via a Java interface
 
+## 功能列表
+ * 支持参数名
+ * 支持注释
+ * 支持自定义异常
+
 ## example
 ```java
 public interface ICommonUserService {
