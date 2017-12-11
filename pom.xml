@@ -4,7 +4,7 @@
 
 	<groupId>com.sohu.thrift</groupId>
 	<artifactId>thrift-generator</artifactId>
-	<version>0.0.2-SNAPSHOT</version>
+	<version>0.1.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>thrift-generator</name>
