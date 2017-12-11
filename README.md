@@ -32,6 +32,7 @@ public class ThriftFileBuilderTest {
 	
 	@Test
 	public void toOutputstream() throws Exception {
+		this.fileBuilder.setSourcePath("src/test/java"); // optional, will generate method order by source code define 
 		this.fileBuilder.buildToOutputStream(ICommonUserService.class, System.out);
 	}
 	
@@ -63,14 +64,14 @@ public class ThriftFileBuilderTest {
 	}
 
 	service ICommonUserService {
-		 	list<User> getUserIds(1:i64 id),
 		 	User login(1:i32 id,2:string name),
-		 	map<string, list<User>> getUsersByName(1:list<string> names),
-		 	map<i64, list<i64>> getGroupUsers(1:list<string> names,2:list<User> userList,3:list<i64> lns,4:i64 ll),
-		 	map<i64, User> getUserByIds(1:list<User> ids),
-		 	list<string> testCase1(1:map<i32, string> num1,2:list<User> num2,3:list<string> num3,4:i64 num4,5:string num5),
 		 	User getUserById(1:i64 id),
 		 	bool saveUser(1:User user)
+		 	list<User> getUserIds(1:i64 id),
+		 	map<i64, User> getUserByIds(1:list<User> ids),
+		 	map<string, list<User>> getUsersByName(1:list<string> names),
+		 	map<i64, list<i64>> getGroupUsers(1:list<string> names,2:list<User> userList,3:list<i64> lns,4:i64 ll),
+		 	list<string> testCase1(1:map<i32, string> num1,2:list<User> num2,3:list<string> num3,4:i64 num4,5:string num5),
 	}
 
 
