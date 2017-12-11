@@ -37,7 +37,7 @@ public class ThriftFileBuilderTest {
 	
 	@Test
 	public void toOutputstream() throws Exception {
-		this.fileBuilder.setSourcePath("src/test/java"); // optional, will generate method order by source code define 
+		this.fileBuilder.setSourceDir("src/test/java"); // optional, will generate method order by source code define 
 		this.fileBuilder.buildToOutputStream(ICommonUserService.class, System.out);
 	}
 	
