@@ -96,24 +96,28 @@ public class ThriftServiceBuilder {
 	}
 
 	private List<ThriftMethod> rebuildBySoureInfo(List<ThriftMethod> thriftMethods) {
-		if (this.srcDir != null) {
-			List<JavaMethod> ms = CommonUtils.getMethodsFromSource(srcDir, this.commonServiceClass);
-			if (!ms.isEmpty() && ms.size() == thriftMethods.size()) {
-				List<ThriftMethod> copyMethods = new ArrayList<ThriftMethod>();
-				for (JavaMethod jm : ms) {
-					for (ThriftMethod tm : thriftMethods) {
-						if (tm.getName().equals(jm.getName())) { // find the method is src
-							tm.setJavaMethod(jm);
-							copyMethods.add(tm);
-							break;
-						}
-					}
-				}
-				thriftMethods = copyMethods;
-			} else {
-				log.warn("get method order fail, ms size:" + ms.size());
-			}
+		if (this.srcDir == null) {
+			return thriftMethods;
 		}
+		List<JavaMethod> ms = CommonUtils.getMethodsFromSource(srcDir, this.commonServiceClass);
+		if (!ms.isEmpty() && ms.size() == thriftMethods.size()) {
+			List<ThriftMethod> copyMethods = new ArrayList<ThriftMethod>();
+			for (JavaMethod jm : ms) {
+				for (ThriftMethod tm : thriftMethods) {
+					if (!tm.getName().equals(jm.getName())) { 
+						continue;
+					}
+					// find the method in source
+					tm.setJavaMethod(jm);
+					copyMethods.add(tm);
+					break;
+				}
+			}
+			thriftMethods = copyMethods;
+		} else {
+			log.warn("get method order fail, ms size:" + ms.size());
+		}
+		
 		return thriftMethods;
 	}
 	
