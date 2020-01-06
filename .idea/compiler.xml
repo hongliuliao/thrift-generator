@@ -9,8 +9,8 @@
         <module name="thrift-generator" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="thrift-generator" target="1.5" />
+    <bytecodeTargetLevel target="9">
+      <module name="thrift-generator" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
