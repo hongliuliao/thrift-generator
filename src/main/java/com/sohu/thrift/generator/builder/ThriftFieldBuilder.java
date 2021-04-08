@@ -9,6 +9,7 @@ import com.sohu.thrift.generator.Generic;
 import com.sohu.thrift.generator.ThriftEnum;
 import com.sohu.thrift.generator.ThriftField;
 import com.sohu.thrift.generator.ThriftStruct;
+import com.sohu.thrift.generator.utils.CommonUtils;
 
 public class ThriftFieldBuilder {
 	
@@ -16,6 +17,11 @@ public class ThriftFieldBuilder {
 		ThriftField thriftField = new ThriftField();
 		thriftField.setName(field.getName());
 		if(field.getName().equals("__PARANAMER_DATA")) {
+			return null;
+		}
+		String declaringClassName = field.getDeclaringClass().getName();
+		String uniquePackageName = CommonUtils.configProperty("uniquePackageName");
+		if (!declaringClassName.contains(uniquePackageName)) {
 			return null;
 		}
 		Type type = field.getGenericType();

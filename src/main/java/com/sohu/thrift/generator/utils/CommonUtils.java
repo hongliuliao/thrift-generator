@@ -3,20 +3,13 @@
  */
 package com.sohu.thrift.generator.utils;
 
-import java.io.File;
+import java.io.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -273,4 +266,30 @@ public class CommonUtils {
 			throw new RuntimeException("get method from path err", e);
 		}
 	}
+
+	public static String configProperty(String name) {
+		Properties p = new Properties();
+        InputStreamReader isr = null;
+		try {
+            String dir = System.getProperty("user.dir");
+            File f = new File(dir + "/app.properties");
+			FileInputStream fis = new FileInputStream(f);
+			isr = new InputStreamReader(fis);
+            p.load(isr);
+		} catch (FileNotFoundException e) {
+			log.error("配置文件找不到 app.properties", e);
+		} catch (IOException e) {
+		    log.error("读取配置文件错误", e);
+        }finally {
+		    if (isr != null) {
+                try {
+                    isr.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return p.getProperty(name);
+    }
+
 }

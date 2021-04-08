@@ -53,9 +53,23 @@
 		      <version>2.0-M3</version>
 		      <scope>compile</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+			<version>RELEASE</version>
+			<scope>compile</scope>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<target>1.8</target>
+					<source>1.8</source>
+				</configuration>
+			</plugin>
 			<plugin>
 			    <groupId>com.thoughtworks.paranamer</groupId>
 			    <artifactId>paranamer-maven-plugin</artifactId>
