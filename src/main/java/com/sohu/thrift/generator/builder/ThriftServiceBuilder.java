@@ -9,7 +9,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import com.sohu.thrift.generator.Generic;
 import com.sohu.thrift.generator.ThriftEnum;
@@ -32,7 +33,7 @@ public class ThriftServiceBuilder {
 	
 	private static final ParameterNameDiscoverer parameterNameDiscoverer = new ParameterNameDiscoverer();
 
-    private static Logger log = Logger.getLogger(ThriftServiceBuilder.class);
+        private static Log log = LogFactory.getLog(ThriftServiceBuilder.class);
 	
 	private ThriftStructBuilder thriftStructBuilder;
 	
